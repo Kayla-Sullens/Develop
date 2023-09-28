@@ -14,13 +14,19 @@ ProductTag.init(
     },
     product_id: {
       type: DataType.INTEGER,
-      //reference: product id,
+      references: {
+        model: 'product',
+        key: 'id',
+    },
     },
     tag_id: {
       type: DataType.INTEGER,
-      //reference: tag id,
+      references: {
+        model: 'tag',
+        key: 'id',
     },
   },
+},
   {
     sequelize,
     timestamps: false,
