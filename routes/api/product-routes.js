@@ -44,7 +44,7 @@ router.get('/:id', (req, res) => {
     ]
   })
   .then(productData => {
-    if (productData) {
+    if (!productData) {
       res.status(404).json({ message: 'Product not found' });
       return;
     }
