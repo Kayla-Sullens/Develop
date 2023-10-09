@@ -3,7 +3,7 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 
 // The `/api/products` endpoint
 
-// get all products
+// Get all products
 router.get('/', (req, res) => {
   Product.findAll({
     attributes: ['id', 'product_name', 'price', 'stock', 'category_id'],
@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
     });
 });
 
-// get one product
+// Get one product by id
 router.get('/:id', (req, res) => {
   Product.findOne({
     where: {
@@ -56,7 +56,7 @@ router.get('/:id', (req, res) => {
   });
 });
 
-// create new product
+// Create a new product
 router.post('/', (req, res) => {
   /* req.body should look like this...
     {
@@ -88,9 +88,9 @@ router.post('/', (req, res) => {
     });
 });
 
-// update product
+// Update a product
 router.put('/:id', (req, res) => {
-  // update product data
+  // Update product data
   Product.update(req.body, {
     where: {
       id: req.params.id,
@@ -102,7 +102,7 @@ router.put('/:id', (req, res) => {
         ProductTag.findAll({
           where: { product_id: req.params.id }
         }).then((productTags) => {
-          // create filtered list of new tag_ids
+          // Create filtered list of new tag_ids
           const productTagIds = productTags.map(({ tag_id }) => tag_id);
           const newProductTags = req.body.tagIds
             .filter((tag_id) => !productTagIds.includes(tag_id))
@@ -113,11 +113,11 @@ router.put('/:id', (req, res) => {
               };
             });
 
-          // figure out which ones to remove
+          // Figure out which ones to remove
           const productTagsToRemove = productTags
             .filter(({ tag_id }) => !req.body.tagIds.includes(tag_id))
             .map(({ id }) => id);
-          // run both actions
+          // Run both actions
           return Promise.all([
             ProductTag.destroy({ where: { id: productTagsToRemove } }),
             ProductTag.bulkCreate(newProductTags),
@@ -133,6 +133,7 @@ router.put('/:id', (req, res) => {
     });
 });
 
+// Delete a product
 router.delete('/:id', (req, res) => {
   Product.destroy({
     where:{
